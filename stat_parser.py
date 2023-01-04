@@ -1,5 +1,6 @@
 #use pip install espn-api to get the espn api
 from espn_api.basketball import League
+import pandas as pd
 
 s2 = input('Enter s2 of your league: ')
 sw = input('Enter the SWID of your league: ')
