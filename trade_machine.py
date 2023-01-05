@@ -9,9 +9,9 @@ db = SQLAlchemy(app)
 
 #data to find correct league and setup the league item
 
-s2d = 'AEApboKD%2FnlwG%2BlfJ7mkTaIlwEzl9o3%2BpFPpyxpT8qDvkyYGYmmK1MAKeTj71D3%2F4j24RcmtVKUvZ010Sf09X%2BAyvP%2FaZ3OkIre4vw%2BG14B1coddvbMaBOoqO2i%2BIdRaHcogthvrGBDc9WF5p0q5Linb0Al%2BLU1lSFGd91eFZxzSfiDbKWGUTr9MAX2nyVbuKivb5R5e4J6V78qafNoxnH4Vqxfb0N6PRS5kZtV35p6xL%2FXtMOp%2B8Be%2FVx6KlJPOKGLT%2FoonWDxM6Td%2Bk0heEMit6IbPZuM50Kcx58lHEOrmew%3D%3D'
-swd = '{817F7C41-C9C5-43F7-BF7C-41C9C5F3F7EB}'
-lidd = 780758162
+s2d = ''
+swd = ''
+lidd = 0
 
 league = League(league_id=lidd, year=2023, espn_s2 = s2d, swid = swd)
 
