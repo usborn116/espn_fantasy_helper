@@ -1,0 +1,140 @@
+body{
+    margin: 5px;
+    margin-left: 20px;
+    margin-right: 20px;
+    font-family: sans-serif;
+    text-decoration: none;
+    overflow: hidden;
+    letter-spacing: 2px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.intro{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.intro h1{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    box-shadow: 0 10px 15px rgba(0,0,0,.6);
+    border-radius: 10px;
+
+}
+
+.box2{
+    display: flex;
+    justify-content: space-around;
+}
+
+.index tr th, .index tr td{
+    padding: 5px;
+    text-align: center;
+}
+
+.box2 table{
+    background-color: rgba(0,245,51,0.5);
+    width: 40%;
+    top: 50%;
+    padding: 40px;
+    align-self: center;
+    box-sizing: border-box;
+    box-shadow: 0 15px 25px rgba(0,0,0,.6);
+    border-radius: 10px;
+    text-decoration: none;
+    overflow: hidden;
+    letter-spacing: 2px;
+}
+
+.form{
+    align-self: center;
+    top: 50%;
+    width: 50%;
+    padding: 40px;
+    background: rgba(0,205,241,0.5);
+    box-sizing: border-box;
+    box-shadow: 0 15px 25px rgba(0,0,0,.6);
+    border-radius: 10px;
+}
+
+.form h2 {
+    margin: 0 0 30px;
+    padding: 0;
+    color: black;
+    text-align: center;
+  }
+
+input{
+    width: 100%;
+    padding: 10px 0;
+    font-size: 16px;
+    color: black;
+    margin-bottom: 30px;
+    border: none;
+    border-bottom: 1px solid black;
+    outline: none;
+    background: transparent;
+}
+label~input:focus, label~input:valid{
+  top: -20px;
+  left: 0;
+  font-size: 12px;
+}
+
+label{
+    text-decoration: none;
+    overflow: hidden;
+    letter-spacing: 2px;
+    top:0;
+    left: 0;
+    padding: 10px 0;
+    font-size: 16px;
+    color: black;
+    transition: .5s;
+  }
+
+
+form .submit{
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    text-decoration: none;
+    text-transform: uppercase;
+    overflow: hidden;
+    transition: .5s;
+    margin-top: 20px;
+    letter-spacing: 4px;
+    border: none;
+  }
+
+.submit:hover {
+    background: darkblue;
+    color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 5px #03e9f4,
+                0 0 25px #03e9f4,
+                0 0 50px #03e9f4,
+                0 0 100px #03e9f4;
+    }
+
+img{
+    width:100px;
+    height:auto;
+    align-self: right;
+}
+
+h1{
+    background-color: rgba(255,120,0,0.5)
+}
+
+.info{
+    display: flex;
+    flex-direction: column;
+}

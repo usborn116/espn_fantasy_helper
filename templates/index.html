@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>ESPN Fantasy Trade Analyzer</title>
+{% endblock %}
+
+{% block body %}
+<div class="intro">
+    <img src="{{url_for('static', filename='espnlogo.png')}}" />
+    <h1>Welcome to the ESPN NBA Fantasy Trade Machine!</h1>
+        <div id="space"></div>
+</div>
+{% if data1 is not defined %}
+<div class="box2">
+            <table class="index">
+                <thead>
+                    <tr>
+                        <th>Team</th>
+                        <th>Index</th>
+                    </tr>
+                </thead>
+                {% for key, value in data.items() %}
+                <tr>
+                    <td> {{key}}</td>
+                    <td> {{value}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+<div class="form">
+<h2>Enter Trade Info</h2>
+<form action="/comp" method="POST">
+    <div class="ids">
+        <label for="myteamid">What is your team's ID?</label>
+        <input type="text" name="myteamid" id="myteamid">
+    </div><div class="ids">
+        <label for="otherteamid">What is your trade partner's team's ID?</label>
+        <input type="text" name="otherteamid" id="otherteamid">
+    </div>
+    <div class="trading">
+    <label for="giving">Enter the players you are trading, separated by a comma, with no spaces in between:</label>
+    <input type="text" name="giving" id="giving">
+    </div><div class="trading">
+    <label for="getting">Enter the players you are receiving, separated by a comma, with no spaces in between:</label><input type="text" name="getting" id="getting">
+    </div>
+    <input type="submit" value="Submit" class="submit">
+</form>
+</div>
+</div>
+{% endif %}
+
+{% if data1 is defined %}
+<div class="info">
+<h1>This is how your 2 teams compare:</h1><br>
+{{ data1 | safe }}
+
+<h1>These are the stats of the players you are giving away:</h1><br>
+{{ data2 | safe }}
+
+<h1>This is how your team is affected by the trade</h1><br>
+{{ data3 | safe }}
+<br>
+<br>
+<br>
+<div class="return">
+    <form action="/" method="POST">
+        <input type="submit" value="Start Over" class="submit">
+    </form>
+</div>
+<br>
+</div>
+{% endif %}
+{% endblock %}
