@@ -11,9 +11,6 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///league.db'
 
 db.init_app(app)
-
-with app.app_context():
-    db.create_all()
       
 #setting up the stats we want to pull for each team
 stats = ['PTS','BLK','STL','AST','OREB','DREB','TO','FGM','FTM','3PTM', 'FGA', '3PTA', 'FTA', 'AFG%', 'A/TO', 'FT%']
