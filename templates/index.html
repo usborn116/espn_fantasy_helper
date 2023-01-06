@@ -8,7 +8,6 @@
 <div class="intro">
     <img src="{{url_for('static', filename='espnlogo.png')}}" />
     <h1>Welcome to the ESPN NBA Fantasy Trade Machine!</h1>
-        <div id="space"></div>
 </div>
 {% if data1 is not defined %}
 <div class="box2">
@@ -19,13 +18,18 @@
                         <th>Index</th>
                     </tr>
                 </thead>
-                {% for key, value in data.items() %}
+                {% for t in data %}
                 <tr>
-                    <td> {{key}}</td>
-                    <td> {{value}}</td>
+                    <td> {{t.name}}</td>
+                    <td> {{t.id}}</td>
                 </tr>
                 {% endfor %}
             </table>
+{% for x in data %}
+    {% i = 0 %}
+    {{ x[i] }}
+    {% i += 1 %}
+{% endfor %}           
 <div class="form">
 <h2>Enter Trade Info</h2>
 <form action="/comp" method="POST">

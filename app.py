@@ -2,62 +2,85 @@ from flask import Flask, request, render_template, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
 from espn_api.basketball import League
 import pandas as pd
+from datetime import datetime
+
+#initialize database
+db = SQLAlchemy()
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
-db = SQLAlchemy(app)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///league.db'
 
+db.init_app(app)
+
+with app.app_context():
+    db.create_all()
+      
+#setting up the stats we want to pull for each team
+stats = ['PTS','BLK','STL','AST','OREB','DREB','TO','FGM','FTM','3PTM', 'FGA', '3PTA', 'FTA', 'AFG%', 'A/TO', 'FT%']
+
+#Create db models
+class Teams(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+    for stat in stats:
+        stat = db.Column(db.Float)
+    
+    def __repr__(self):
+        return '<Name %r>' % self.id  
+
+class Players(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+    for stat in stats:
+        stat = db.Column(db.Float, nullable=False)
+
+    def __repr__(self):
+        return '<Name %r>' % self.id  
+
+with app.app_context():
+    db.drop_all()
+    db.create_all()
 #data to find correct league and setup the league item
-
-s2d = ''
-swd = ''
-lidd = 0
+s2d = 'AEApboKD%2FnlwG%2BlfJ7mkTaIlwEzl9o3%2BpFPpyxpT8qDvkyYGYmmK1MAKeTj71D3%2F4j24RcmtVKUvZ010Sf09X%2BAyvP%2FaZ3OkIre4vw%2BG14B1coddvbMaBOoqO2i%2BIdRaHcogthvrGBDc9WF5p0q5Linb0Al%2BLU1lSFGd91eFZxzSfiDbKWGUTr9MAX2nyVbuKivb5R5e4J6V78qafNoxnH4Vqxfb0N6PRS5kZtV35p6xL%2FXtMOp%2B8Be%2FVx6KlJPOKGLT%2FoonWDxM6Td%2Bk0heEMit6IbPZuM50Kcx58lHEOrmew%3D%3D'
+swd = '{817F7C41-C9C5-43F7-BF7C-41C9C5F3F7EB}'
+lidd = 780758162
 
 league = League(league_id=lidd, year=2023, espn_s2 = s2d, swid = swd)
 
-#setting up the stats we want to pull for each team
-stats = ['PTS','BLK','STL','AST','OREB','DREB','TO','FGM','FTM','3PTM', 'FGA', '3PTA', 'FTA']
-
 #creating a dictionary of each team, with each team's cumulated stat in the categories above, and cleaning it
-avgs = dict()
-
-for team in league.teams:
-    avgs[team.team_name] = dict()
-    for stat in stats:
-        avgs[team.team_name][stat] = 0
-    for player in team.roster:
-        try: 
-            for stat in player.stats['2023_total']['avg']:
-                if stat in stats:
-                    avgs[team.team_name][stat] += player.stats['2023_total']['avg'][stat]
-        except:
-            continue
+avgs = dict()   
             
-df = pd.DataFrame(avgs)
-df = df.transpose()
-df['AFG%'] = (df['3PTM']*0.5+df['FGM'])/df['FGA']
-df['A/TO'] = df['AST']/df['TO']
-df['FT%'] = df['FTM']/df['FTA']
-df.loc['mean'] = df.mean()
-df.loc['stddev'] = df.std()
-cleandf = df[['PTS', 'BLK','STL','AST','OREB','DREB','FTM','3PTM','AFG%','A/TO','FT%']]
+#df = pd.DataFrame(avgs)
+#df = df.transpose()
+#df['AFG%'] = (df['3PTM']*0.5+df['FGM'])/df['FGA']
+#df['A/TO'] = df['AST']/df['TO']
+#df['FT%'] = df['FTM']/df['FTA']
+#df.loc['mean'] = df.mean()
+#df.loc['stddev'] = df.std()
+#cleandf = df[['PTS', 'BLK','STL','AST','OREB','DREB','FTM','3PTM','AFG%','A/TO','FT%']]
 
-#creating a dict to show each team's index number and showing that dictionary for reference
-
-kys = dict()
-i = 0
-for row in df.itertuples():
-    if i < 12:
-        kys[row.Index] = i
-        i += 1
-
-teamcomp = 0
-tradingdf = 0
-tmpteam1 = dict()
+#teamcomp = 0
+#tradingdf = 0
+#tmpteam1 = dict()
 
 @app.route('/', methods=['POST','GET'])
 def index():
-    return render_template('index.html', data=kys)
+    for team in league.teams:
+        name = team.team_name
+        tm = Teams(name=name)
+        for stat in stats:
+            tm.stat = 0
+        for player in team.roster:
+            try: 
+                for stat in player.stats['2023_total']['avg']:
+                    if stat in stats:
+                        tm.stat += player.stats['2023_total']['avg'][stat]
+            except:
+                continue
+        db.session.add(tm)
+        db.session.commit()
+    teams = Teams.query.order_by(Teams.id)
+    return render_template('index.html', data=teams)
 
 @app.route('/comp', methods=['POST','GET'])
 def comp():
@@ -124,5 +147,6 @@ def comp():
     comp = comp.append(diffs)
     i = diffs.index.tolist()[1]
     return render_template('index.html', data=kys, data1=teamcomp.to_html(), data2=tradingdf.to_html(), data3=diffs.loc[[i]].to_html())
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
